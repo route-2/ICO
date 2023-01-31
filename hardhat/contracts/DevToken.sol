@@ -45,6 +45,18 @@ function claim() public {
     _mint(msg.sender, amount * tokensPerNFT);
 
 }
+
+function withdraw() public onlyOwner {
+
+    uint256 amount = address(this).balance;
+   require(amount > 0, "Nothing to withdraw, contract balance empty");
+    address _owner = owner();
+    (bool sent, ) = _owner.call{value: amount}(""); // , is for calldata i.e converting params to hex data and "" if there's no other function being called
+        require(sent, "Failed to send Ether");
+
+}
+ receive() external payable{} // no msg.data
+ fallback() external payable{} // has msg.data 
      
 
   }
