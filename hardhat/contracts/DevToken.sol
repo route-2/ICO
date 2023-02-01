@@ -5,7 +5,7 @@
   import "@openzeppelin/contracts/access/Ownable.sol";
   import "./IDevs.sol";
 
-  abstract contract DevToken is ERC20, Ownable {
+   contract DevToken is ERC20, Ownable {
     IDevs DevsNFT;
      uint256 public constant tokenPrice = 0.001 ether;
      uint256 public constant tokensPerNFT = 10 * 10 ** 18;
