@@ -103,6 +103,33 @@ export default function Home() {
 
     }
 
+    const mintCryptoDevToken = async () => {
+      try {
+        const signer = await getProviderOrSigner(true);
+        const tokenContract = new Contract(
+          TOKEN_CONTRACT_ADDRESS,
+          TOKEN_CONTRACT_ABI,
+          signer
+        );
+        const value = 0.001 * amount; // price of 1 token * number of nfts
+
+        const tx = await tokenContract.mint(amount, {
+          value: utils.parseEther(value.toString()),
+
+        });
+        setLoading(true);
+        await tx.wait();
+        setLoading(false);
+        window.alert("Successfully minted  Dev Tokens");
+        await getBalanceOfCryptoDevTokens();
+        await getTotalTokensMinted();
+        await getTokensToBeClaimed();
+  
+      } catch (error) {
+        
+      }
+    }
+
 
 
 }
