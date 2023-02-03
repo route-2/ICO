@@ -117,7 +117,9 @@ export default function Home() {
           value: utils.parseEther(value.toString()),
 
         });
+        
         setLoading(true);
+        // wait for the transaction to get mined
         await tx.wait();
         setLoading(false);
         window.alert("Successfully minted  Dev Tokens");
@@ -150,8 +152,10 @@ export default function Home() {
         // wait for the transaction to get mined
         await tx.wait();
         setLoading(false);
-        window.alert("Sucessfully claimed Crypto Dev Tokens");
+        window.alert("Sucessfully claimed  Dev Tokens");
+
         await getBalanceOfDevTokens();
+        
         await getTotalTokensMinted();
         await getTokensToBeClaimed();
       } catch (err) {
