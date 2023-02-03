@@ -103,7 +103,7 @@ export default function Home() {
 
     }
 
-    const mintCryptoDevToken = async () => {
+    const mintCryptoToken = async () => {
       try {
         const signer = await getProviderOrSigner(true);
         const tokenContract = new Contract(
@@ -134,7 +134,7 @@ export default function Home() {
     /**
      * claimCryptoDevTokens: Helps the user claim Crypto Dev Tokens
      */
-    const claimCryptoDevTokens = async () => {
+    const claimDevTokens = async () => {
       try {
         // We need a Signer here since this is a 'write' transaction.
         // Create an instance of tokenContract
@@ -151,7 +151,7 @@ export default function Home() {
         await tx.wait();
         setLoading(false);
         window.alert("Sucessfully claimed Crypto Dev Tokens");
-        await getBalanceOfCryptoDevTokens();
+        await getBalanceOfDevTokens();
         await getTotalTokensMinted();
         await getTokensToBeClaimed();
       } catch (err) {
@@ -280,13 +280,115 @@ export default function Home() {
         });
         connectWallet();
         getTotalTokensMinted();
-        getBalanceOfCryptoDevTokens();
+        getBalanceOfDevTokens();
         getTokensToBeClaimed();
         getOwner();
       }
     }, [walletConnected]);
-  
 
+    const renderButton = () => {
+      // If we are currently waiting for something, return a loading button
+      if (loading) {
+        return (
+          <div>
+            <button className={styles.button}>Loading...</button>
+          </div>
+        );
+      }
+      // If tokens to be claimed are greater than 0, Return a claim button
+      if (tokensToBeClaimed > 0) {
+        return (
+          <div>
+            <div className={styles.description}>
+              {tokensToBeClaimed * 10} Tokens can be claimed!
+            </div>
+            <button className={styles.button} onClick={claimDevTokens}>
+              Claim Tokens
+            </button>
+          </div>
+        );
+      }
+
+      
+  
+    }
+
+    return (
+      <div style={{ display: "flex-col" }}>
+      <div>
+        <input
+          type="number"
+          placeholder="Amount of Tokens"
+          // BigNumber.from converts the `e.target.value` to a BigNumber
+          onChange={(e) => setTokenAmount(BigNumber.from(e.target.value))}
+          className={styles.input}
+        />
+      </div>
+
+      <button
+        className={styles.button}
+        disabled={!(tokenAmount > 0)}
+        onClick={() => mintDevToken(tokenAmount)}
+      >
+        Mint Tokens
+      </button>
+    </div>
+  )
+
+    return (
+      <div>
+      <Head>
+        <title>Crypto Devs</title>
+        <meta name="description" content="ICO-Dapp" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className={styles.main}>
+        <div>
+          <h1 className={styles.title}>Welcome to Crypto Devs ICO!</h1>
+          <div className={styles.description}>
+            You can claim or mint Crypto Dev tokens here
+          </div>
+          {walletConnected ? (
+            <div>
+              <div className={styles.description}>
+                {/* Format Ether helps us in converting a BigNumber to string */}
+                You have minted {utils.formatEther(balanceOfCryptoDevTokens)} Crypto
+                Dev Tokens
+              </div>
+              <div className={styles.description}>
+                {/* Format Ether helps us in converting a BigNumber to string */}
+                Overall {utils.formatEther(tokensMinted)}/10000 have been minted!!!
+              </div>
+              {renderButton()}
+              {/* Display additional withdraw button if connected wallet is owner */}
+                {isOwner ? (
+                  <div>
+                  {loading ? <button className={styles.button}>Loading...</button>
+                           : <button className={styles.button} onClick={withdrawCoins}>
+                               Withdraw Coins
+                             </button>
+                  }
+                  </div>
+                  ) : ("")
+                }
+            </div>
+          ) : (
+            <button onClick={connectWallet} className={styles.button}>
+              Connect your wallet
+            </button>
+          )}
+        </div>
+        <div>
+          <img className={styles.image} src="./0.svg" />
+        </div>
+      </div>
+
+      <footer className={styles.footer}>
+        Made with &#10084; by Crypto Devs
+      </footer>
+    </div>
+  
+    )
 
 
 }
