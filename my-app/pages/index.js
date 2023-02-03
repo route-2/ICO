@@ -284,7 +284,7 @@ export default function Home() {
         </div>
       );
     }
-  };
+  
 
   return (
     <div style={{ display: "flex-col" }}>
@@ -307,8 +307,7 @@ export default function Home() {
       </button>
     </div>
   );
-}
-
+};
 return (
   <div>
     <Head>
@@ -364,3 +363,5 @@ return (
     <footer className={styles.footer}>Made with &#10084; by Ruthu </footer>
   </div>
 );
+        }
+
